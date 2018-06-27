@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Course} from "../model/course";
-import {interval, Observable, of, timer} from 'rxjs';
-import {catchError, delayWhen, map, retryWhen, shareReplay, tap} from 'rxjs/operators';
 
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']

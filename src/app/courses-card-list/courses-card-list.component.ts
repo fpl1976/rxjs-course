@@ -1,9 +1,10 @@
-import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
-import {Course} from "../model/course";
-import {MatDialog, MatDialogConfig} from "@angular/material";
-import {CourseDialogComponent} from "../course-dialog/course-dialog.component";
+import { Component, Input, OnInit } from '@angular/core';
+import { Course } from '../model/course';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { CourseDialogComponent } from '../course-dialog/course-dialog.component';
 
 @Component({
+    // tslint:disable-next-line:component-selector
     selector: 'courses-card-list',
     templateUrl: './courses-card-list.component.html',
     styleUrls: ['./courses-card-list.component.css']
@@ -20,7 +21,7 @@ export class CoursesCardListComponent implements OnInit {
 
     }
 
-    editCourse(course:Course) {
+    editCourse(course: Course) {
 
         const dialogConfig = new MatDialogConfig();
 
