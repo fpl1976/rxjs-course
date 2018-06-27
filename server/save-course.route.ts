@@ -1,14 +1,14 @@
-import {Request, Response} from 'express';
-import {COURSES} from "./db-data";
-import {setTimeout} from 'timers';
+import { Request, Response } from 'express';
+import { COURSES } from './db-data';
+import { setTimeout } from 'timers';
 
 
 export function saveCourse(req: Request, res: Response) {
 
-    const id = req.params["id"],
+    const id = req.params['id'],
         changes = req.body;
 
-    console.log("Saving course", id, JSON.stringify(changes));
+    console.log('Saving course', id, JSON.stringify(changes));
 
 
     COURSES[id] = {
