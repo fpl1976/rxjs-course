@@ -1,5 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
+import { map, catchError, filter, shareReplay } from 'rxjs/operators';
+import { of, noop, Observable } from 'rxjs';
+
+import { createHttpObservable } from '../util';
+import { Course } from '../model/course';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -9,12 +14,31 @@ import {Component, OnInit} from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+    beginners$: Observable<Course[]>;
+    advanced$: Observable<Course[]>;
 
-    constructor() {
-
-    }
+    constructor() { }
 
     ngOnInit() {
+        const http$ =
+            createHttpObservable('/api/courses');
+
+        const courses$: Observable<Course[]> = http$
+            .pipe(
+                map(res => [...res.payload]),
+                shareReplay(),
+                catchError(error => of(error))
+            );
+
+        this.beginners$ = courses$
+            .pipe(
+                map(courses => courses.filter(c => c.category === 'BEGINNER'))
+            );
+
+        this.advanced$ = courses$
+            .pipe(
+                map(courses => courses.filter(c => c.category === 'ADVANCED'))
+            );
 
 
 
