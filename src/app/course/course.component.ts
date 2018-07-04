@@ -13,6 +13,9 @@ import {
     withLatestFrom,
     concatAll, shareReplay
 } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { Lesson } from '../model/lesson';
+import { createHttpObservable } from '../util';
 
 
 @Component({
@@ -23,7 +26,8 @@ import {
 })
 export class CourseComponent implements OnInit, AfterViewInit {
 
-
+    course$: Observable<Course>;
+    lessons$: Observable<Lesson[]>;
 
     @ViewChild('searchInput') input: ElementRef;
 
@@ -33,11 +37,12 @@ export class CourseComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-
         const courseId = this.route.snapshot.params['id'];
-
-
-
+        this.course$ = createHttpObservable(`/api/courses/${courseId}`);
+        this.lessons$ = createHttpObservable(`api/lessons?courseId=${courseId}&pageSize=100`)
+            .pipe(
+                map(res => res.payload)
+            );
     }
 
     ngAfterViewInit() {

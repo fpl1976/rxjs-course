@@ -4,6 +4,10 @@ import { Course } from '../model/course';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 
+import { filter, concatMap, mergeMap, exhaustMap } from 'rxjs/operators';
+import { save } from '../util';
+import { fromEvent } from 'rxjs';
+
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'course-dialog',
@@ -16,7 +20,6 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
     course: Course;
 
     @ViewChild('saveButton') saveButton: ElementRef;
-
     @ViewChild('searchInput') searchInput: ElementRef;
 
     constructor(
@@ -37,14 +40,32 @@ export class CourseDialogComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
 
+        // concat observables strategy
+        // this.form.valueChanges
+        //     .pipe(
+        //         filter(() => this.form.valid),
+        //         concatMap(changes => save(this.course.id, 'courses', changes))
+        //     ).subscribe();
 
+        // merge observables strategy
+        this.form.valueChanges
+            .pipe(
+                filter(() => this.form.valid),
+                mergeMap(changes => save(this.course.id, 'courses', changes))
+            ).subscribe();
 
     }
 
 
 
     ngAfterViewInit() {
-
+        fromEvent(this.saveButton.nativeElement, 'click')
+            .pipe(
+                // concatMap(() => save(this.course.id, 'courses', this.form.value))
+                // Ignores all clicks emmitted while the save observable is running
+                exhaustMap(() => save(this.course.id, 'courses', this.form.value))
+            )
+            .subscribe();
 
     }
 

@@ -6,7 +6,7 @@ export function searchLessons(req: Request, res: Response) {
 
     const queryParams = req.query;
 
-    const courseId = queryParams.courseId,
+    const courseId = +queryParams.courseId,
         filter = queryParams.filter || '',
         sortOrder = queryParams.sortOrder || 'asc',
         // tslint:disable-next-line:radix
